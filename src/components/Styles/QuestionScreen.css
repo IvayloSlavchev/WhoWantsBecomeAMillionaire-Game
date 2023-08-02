@@ -39,3 +39,8 @@
     margin-right: auto;
     cursor: pointer;
 }
+
+.error-message {
+    color: white;
+    text-align: center;
+}

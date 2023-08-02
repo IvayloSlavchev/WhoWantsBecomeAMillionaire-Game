@@ -1,0 +1,15 @@
+.error-page {
+    text-align: center;
+    color: white;
+    background: blue;
+}
+
+.status-code {
+    animation: rotate 2.5s linear infinite;
+    margin-top: 4rem;
+    font-size: 4rem;
+}
+
+@keyframes rotate{
+  to{ transform: rotate(-360deg); }
+}
