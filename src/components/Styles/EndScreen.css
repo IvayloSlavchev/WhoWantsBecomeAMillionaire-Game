@@ -1,0 +1,14 @@
+.end-screen-root-element {
+    width: 100%;
+    height: 100vh;
+}
+
+.prizes-board-class {
+    text-align: center;
+    color: goldenrod;
+    border: 1px solid white;
+    width: 20%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+}

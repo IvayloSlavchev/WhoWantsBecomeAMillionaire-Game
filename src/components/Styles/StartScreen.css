@@ -1,0 +1,82 @@
+.start-screen-root-element {
+    width: 100%;
+    height: 100vh;
+
+}
+
+.logo-image-class {
+    width: 100%;
+    text-align: center;
+}
+
+.game-logo-image {
+    max-width: 30%;
+}
+
+.game-logo-image-mobile {
+    max-width: 90%;
+}
+
+.start-button-and-category-dropdown-class {
+    width: 100%;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.start-button,
+.category-dropdown-menu,
+.difficulty-dropdown-menu,
+.start-game-button {
+    width: 50%;
+    padding: .8rem;
+    font-size: 18px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    background: rgb(68, 68, 68);
+    background: linear-gradient(90deg, rgba(68, 68, 68, 1) 0%, rgba(68, 68, 68, 1) 99%);
+    color: white;
+}
+
+.category-dropdown-menu,
+.difficulty-dropdown-menu {
+    text-align: center;
+}
+
+.dropdown-option {
+    color: black;
+    cursor: pointer;
+
+}
+
+.category-dropdown {
+    width: 100%;
+    color: white;
+    padding-bottom: 8rem;
+}
+
+.start-game-button {
+    margin-top: 2rem;
+}
+
+/* Mobile version */
+
+.start-button-mobile,
+.category-dropdown-menu-mobile,
+.difficulty-dropdown-menu-mobile {
+    width: 90%;
+    padding: .8rem;
+    font-size: 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    background: rgb(68, 68, 68);
+    background: linear-gradient(90deg, rgba(68, 68, 68, 1) 0%, rgba(68, 68, 68, 1) 99%);
+    color: white;
+    margin-left: .1rem;
+}
+
+.category-dropdown-menu-mobile,
+.difficulty-dropdown-menu-mobile {
+    text-align: center;
+}
