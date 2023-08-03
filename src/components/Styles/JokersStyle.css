@@ -1,0 +1,26 @@
+.audience-root-element,
+.audience-answer-class {
+    width: 100%;
+}
+
+.timer-root-element {
+    border: 1px solid white;
+    color: white;
+    border-radius: 50%;
+    width: 50%;
+    padding: .3rem;
+    text-align: center;
+}
+
+.audience-button, .call-friend-button, .fifty-fifty-joker-button {
+    background: none;
+    color: white;
+    width: 100%;
+    border-radius: 50%;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.fifty-fifty-joker-button {
+    padding: .4rem;
+}

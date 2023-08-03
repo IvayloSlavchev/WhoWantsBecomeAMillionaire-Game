@@ -8,38 +8,50 @@ const EndScreen = () => {
 
     const [message, setMessage] = useState<string>("");
     const [countOfAnsweredQuestions, setCountOfAnsweredQuestions] = useState<number>(0);
+    const [prizeAndAnsweredQuestion, setPrizeAndAnsweredQuestion] = useState<any>([]);
 
-    const prize: number[][] = [ [100, 200, 300, 400, 500, 1000, 1500, 2000, 3000, 5000, 10000, 20000, 30000, 50000, 100000], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]];
+    function addPrizesAndNumberOfQuestion() {
+        const prizeArray: number[] = [0, 100, 200, 300, 400, 500, 1000, 1500, 2000, 3000, 5000, 10000, 20000, 30000, 50000, 100000];
+        const prizesObject: any = {};
+        
+        for(let i = 1; i < prizeArray.length; i++){
+            prizesObject[i] = prizeArray[i];
+        }
+        
+        setPrizeAndAnsweredQuestion(prizesObject);
+    }   
 
     function hasUserAnsweredAllTheQuestionsFunction() {
-        const completedSuccessfully: string | null = localStorage.getItem('hasCompleted');
+        const numberOfAnsweredQuestions: any = localStorage.getItem('countOfAnsweredQuestion');
 
-        if(completedSuccessfully === "No") {
-            const numberOfAnsweredQuestions: string | null = localStorage.getItem('numberOfAnsweredQuestions');
-
+        setCountOfAnsweredQuestions(Number(numberOfAnsweredQuestions));
+        if(numberOfAnsweredQuestions !== '15') {
             return setMessage("Submitted wrong answer or timed out.");
-        }
-
+        }    
         setMessage("CONGRATULATIONS YOU WON 100,000lv.");
     }
+
+    useEffect(() => {
+        hasUserAnsweredAllTheQuestionsFunction();
+        addPrizesAndNumberOfQuestion();
+    }, [])
 
     return (
         <div className='end-screen-root-element'>
             <div className='closing-quotes-class'>
                 <h1>End of the game!</h1>
                 <h3>{message}</h3>
+                <h3>Answered questions: {countOfAnsweredQuestions}</h3>
 
             </div>
 
             <div className={width > 900 ? 'prizes-board-class' : 'prizes-board-class-mobile'}>
                 {
-                    prize.slice(0).reverse().map((item: any, index: number) => {
-                        
-                        return <div className='prize-paragraph' key={index}>
-                            {item.reverse().map((item: any) => {return <p>{item}</p>})}
-                        </div>;
+                    Object.keys(prizeAndAnsweredQuestion).reverse().map((item: any, index) => {
+                        return <p style={{ background: item == countOfAnsweredQuestions ? 'white' : '', color: item == countOfAnsweredQuestions ? 'black' : '' }} key={index}>{item}: {prizeAndAnsweredQuestion[item]}</p>
                     })
                 }
+
             </div>
 
             

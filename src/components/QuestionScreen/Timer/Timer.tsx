@@ -8,11 +8,13 @@ const Timer = () => {
        let interval: number = 0;
         
         if(timer > 0) {
-            interval = setInterval(() => setTimer(oldState => oldState - 1), 1000);
-            return () => {
-                clearInterval(interval);
-            }
-        }   
+            // interval = setInterval(() => setTimer(oldState => oldState - 1), 1000);
+            // return () => {
+            //     clearInterval(interval);
+            // }
+        } else {
+         //   window.location.href = '/finish';
+        }
 
 
     }, [timer])

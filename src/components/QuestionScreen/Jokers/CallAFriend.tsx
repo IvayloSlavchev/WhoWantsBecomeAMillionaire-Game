@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import "../../Styles/CallAFriend.css";
+import "../../Styles/JokersStyle.css";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import useWindowScreenSize from '../../../useWindowScreenSize';
 
 const CallAFriend = ({ correctAnswer }: { correctAnswer: string }) => {
-    const [width, height] = useWindowScreenSize();
+    const [width] = useWindowScreenSize();
     const [hasJokenBeenUsed, setHasJokerBeenUsed] = useState<boolean>(false);
     const [friendAnswer, setFriendAnswer] = useState<string>("");
     const [hasUserChooseTheJoker, setHasUserChooseTheJoker] = useState<boolean>(false);
@@ -23,12 +23,12 @@ const CallAFriend = ({ correctAnswer }: { correctAnswer: string }) => {
         <div className='call-friend-root-element'>
             {
                 !hasJokenBeenUsed ? <div className={width > 900 ? 'friends-answer-class' : 'friends-answer-class-mobile'}>
-                    <button onClick={() => callFriendFunction()}>
+                    <button className='call-friend-button' onClick={() => callFriendFunction()}>
                         <LocalPhoneIcon />
                     </button>
 
-                    { hasUserChooseTheJoker ? <p className='friend-answer'>{friendAnswer}</p> : null }
-                </div> : <button disabled={true}>
+                    <p className='friend-answer'>{hasUserChooseTheJoker ? friendAnswer : null}</p>
+                </div> : <button className='call-friend-button' disabled={true}>
                     <LocalPhoneIcon />
                 </button>
             }

@@ -1,5 +1,5 @@
 import { useState } from  'react';
-import "../../Styles/AudienceHelp.css";
+import "../../Styles/JokersStyle.css";
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 
 const AudienceHelp = ({ correctAnswer } : { correctAnswer: string }) => {
@@ -21,11 +21,11 @@ const AudienceHelp = ({ correctAnswer } : { correctAnswer: string }) => {
        <div className='audience-root-element'>
             {
                 !hasJokerBeenUsed ? <div className='audience-answer-class'>
-                    <button onClick={() => askAudienceForHelp()}>
+                    <button className='audience-button' onClick={() => askAudienceForHelp()}>
                         <Diversity3Icon />
                     </button>
-                    { hasUserChooseTheJoker ?  <p>{audienceAnswerHook}</p> : null }
-                </div> : <button disabled={true}>
+                    <p>{hasUserChooseTheJoker ? audienceAnswerHook : null}</p>
+                </div> : <button className='audience-button' disabled={true}>
                     <Diversity3Icon />
                 </button>
             }

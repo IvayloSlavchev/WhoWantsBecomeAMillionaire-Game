@@ -9,7 +9,7 @@ import FiftyFifty from './Jokers/FiftyFifty';
 import Timer from './Timer/Timer';
 
 const QuestionScreen = () => {
-    const [width, height] = useWindowScreenSize();
+    const [width] = useWindowScreenSize();
 
     const [questions, setQuestions] = useState<any>([]);
 
@@ -21,18 +21,22 @@ const QuestionScreen = () => {
     const [correctAnswer, setCorrectAnswer] = useState<string>("");
     const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
 
-    function getQuestion() {
-        if (providedAnswer !== correctAnswer) {
-            return setIsAnswerCorrect(false);
-        }
+    const [numberOfAnsweredQuestions, setNumberOfAnsweredQuestions] = useState<number>(1);
 
+    function getQuestion() {
         setIndividualQuestion(questions[numberOfQuestion].question);
         setCorrectAnswer(questions[numberOfQuestion].correct_answer);
         getRandomAnswers(questions);
         setIsAnswerCorrect(true);
 
-        if (numberOfQuestion === 0) return setNumberOfQuestion(oldIndex => oldIndex + 2);
-
+        if (providedAnswer !== correctAnswer) {
+            window.location.href = '/finish';
+            return setIsAnswerCorrect(false);
+        }
+        
+        localStorage.setItem("countOfAnsweredQuestion", numberOfAnsweredQuestions.toString());
+        
+        setNumberOfAnsweredQuestions(oldCount => oldCount + 1);
         setNumberOfQuestion(oldIndex => oldIndex + 1);
     }
 
@@ -80,17 +84,19 @@ const QuestionScreen = () => {
     return (
         <div className='questions-root-element'>
             {questions.length == 0 ? <h1 className='loading-message'>Loading...</h1> : <div>
-                <div className={width > 900 ? 'jokers-class' : 'jokers-class-mobile'}>
-                    <CallAFriend correctAnswer={questions[numberOfQuestion].correct_answer} />
-                    <AudienceHelp correctAnswer={questions[numberOfQuestion].correct_answer} />
-                    <FiftyFifty />
-                    <button className='' onClick={() => getQuestion()}>Next</button>
-                </div>
+               <div className='jokers-timer-and-next-question-button'>
+                    <div className='timer-and-next-question-buttton'>
+                        <Timer />
+                        <button className='next-question-button' onClick={() => getQuestion()}>Next</button>
+                    </div>
 
-                <div>
-                    <Timer />
-                </div>
-
+                    <div className={width > 900 ? 'jokers-class' : 'jokers-class-mobile'}>
+                        <CallAFriend correctAnswer={questions[numberOfQuestion].correct_answer} />
+                        <AudienceHelp correctAnswer={questions[numberOfQuestion].correct_answer} />
+                        <FiftyFifty />
+                        
+                    </div>
+               </div>
 
                 <div className='question-and-answers-classes'>
                     <div className='question-class'>

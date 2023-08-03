@@ -3,22 +3,23 @@
     height: 100vh;
 }
 
+.closing-quotes-class {
+    text-align: center;
+    color: white;
+}
+
 .prizes-board-class, .prizes-board-class-mobile {
     text-align: center;
-    color: goldenrod;
     border: 1px solid white;
-    width: 10%;
-    padding-left: 4rem;
-    padding-right: 4rem;
+    width: 20%;
     margin-left: auto;
     margin-right: auto;
     border-radius: 10px;
-    display: flex;
-    justify-content: space-around;
+    color: goldenrod;
 }
 
 .prizes-board-class-mobile {
-    width: 10%;
+    width: 50%;
 }
 
 .prize-paragraph {
@@ -26,10 +27,6 @@
     font-size: 16px;
 }
 
-.closing-quotes-class {
-    text-align: center;
-    color: white;
-}
 
 .play-again-button-class {
     text-align: center;

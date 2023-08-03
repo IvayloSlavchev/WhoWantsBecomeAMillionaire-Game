@@ -1,9 +1,9 @@
-import React from 'react'
+import "../../Styles/JokersStyle.css";
 
 const FiftyFifty = () => {
   return (
     <div>
-      <button>50:50</button>
+      <button className="fifty-fifty-joker-button">50:50</button>
     </div>
   )
 }
