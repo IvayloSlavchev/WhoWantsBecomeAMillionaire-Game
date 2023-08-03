@@ -24,7 +24,7 @@ const AudienceHelp = ({ correctAnswer } : { correctAnswer: string }) => {
                     <button className='audience-button' onClick={() => askAudienceForHelp()}>
                         <Diversity3Icon />
                     </button>
-                    <p>{hasUserChooseTheJoker ? audienceAnswerHook : null}</p>
+                    <p className='audience-answer'>{hasUserChooseTheJoker ? audienceAnswerHook : null}</p>
                 </div> : <button className='audience-button' disabled={true}>
                     <Diversity3Icon />
                 </button>

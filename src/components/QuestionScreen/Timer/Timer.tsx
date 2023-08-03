@@ -4,8 +4,12 @@ import "../../Styles/Timer.css";
 const Timer = () => {
     const [timer, setTimer] = useState<number>(60);
 
+    function startCountdown() {
+    }
+    
     useEffect(() => {
-       let interval: number = 0;
+    
+        let interval: number = 0;
         
         if(timer > 0) {
             // interval = setInterval(() => setTimer(oldState => oldState - 1), 1000);
@@ -13,9 +17,8 @@ const Timer = () => {
             //     clearInterval(interval);
             // }
         } else {
-         //   window.location.href = '/finish';
+            window.location.href = '/finish';
         }
-
 
     }, [timer])
 

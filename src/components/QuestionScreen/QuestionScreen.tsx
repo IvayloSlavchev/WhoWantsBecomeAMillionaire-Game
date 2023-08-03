@@ -24,27 +24,33 @@ const QuestionScreen = () => {
     const [numberOfAnsweredQuestions, setNumberOfAnsweredQuestions] = useState<number>(1);
 
     function getQuestion() {
+        if(numberOfQuestion === 15) {
+            setNumberOfAnsweredQuestions(oldCount => oldCount + 1);
+            localStorage.setItem("countOfAnsweredQuestion", numberOfAnsweredQuestions.toString());
+            return window.location.href = '/finish';
+        }
+
+        if(providedAnswer !== correctAnswer) {
+            return window.location.href = '/finish';
+        }
+
         setIndividualQuestion(questions[numberOfQuestion].question);
         setCorrectAnswer(questions[numberOfQuestion].correct_answer);
         getRandomAnswers(questions);
-        setIsAnswerCorrect(true);
 
-        if (providedAnswer !== correctAnswer) {
-            window.location.href = '/finish';
-            return setIsAnswerCorrect(false);
-        }
-        
         localStorage.setItem("countOfAnsweredQuestion", numberOfAnsweredQuestions.toString());
         
-        setNumberOfAnsweredQuestions(oldCount => oldCount + 1);
         setNumberOfQuestion(oldIndex => oldIndex + 1);
+        setNumberOfAnsweredQuestions(oldCount => oldCount + 1);
+        
     }
 
     function getRandomAnswers(providedArray: any) {
-        const answersArray: string[] = [...providedArray[numberOfQuestion].incorrect_answers, providedArray[numberOfQuestion].correct_answer];
-        const randomRotationOfAnswers: number = Math.floor(Math.random() * 6);
-        const rotateFunction = arrayRotate(answersArray, randomRotationOfAnswers);
-        setAnswers(rotateFunction);
+        const answerArray: string[] = [...providedArray[numberOfQuestion].incorrect_answers, providedArray[numberOfQuestion].correct_answer];
+        const randomRotationOfArray: number = Math.floor(Math.random() * 6);
+        arrayRotate(answerArray, randomRotationOfArray);
+        setAnswers(answerArray);
+        return answerArray;
     }
 
     function arrayRotate(arr: any, count: number) {
@@ -53,32 +59,44 @@ const QuestionScreen = () => {
         return arr
     }
 
+    async function getFirstQuestion() {
+        const getChoosenCategory: string | null = localStorage.getItem("category");
+        const getChoosenDifficulty: string | null = localStorage.getItem("difficulty");
 
-    useEffect(() => {
+        if (getChoosenCategory === null || getChoosenCategory === null) return;
 
-        (async () => {
-            const getChoosenCategory: string | null = localStorage.getItem("category");
-            const getChoosenDifficulty: string | null = localStorage.getItem("difficulty");
+        if(getChoosenCategory == "films") {
+            const generatedFilmsQbject: any = await filmsQuestions(getChoosenDifficulty);
 
-            if (getChoosenCategory === null || getChoosenCategory === null) return;
+            setQuestions(generatedFilmsQbject.results);
+            setIndividualQuestion(generatedFilmsQbject.results[numberOfQuestion].question);
+            setCorrectAnswer(generatedFilmsQbject.results[numberOfQuestion].correct_answer);
+            getRandomAnswers(generatedFilmsQbject.results);
+            setNumberOfQuestion(oldState => oldState + 1);
 
-            switch (getChoosenCategory) {
-                case "films":
-                    const generatedFilmsQbject: any = await filmsQuestions(getChoosenDifficulty);
-                    setQuestions(generatedFilmsQbject.results);
-                    setIndividualQuestion(generatedFilmsQbject.results[0].question);
-                    getRandomAnswers(generatedFilmsQbject.results);
-                    break;
-                case "music":
-                    const generatedMusicObject: any = await musicQuestions(getChoosenDifficulty);
-                    setQuestions(generatedMusicObject.results);
-                    setIndividualQuestion(generatedMusicObject.results[0].question);
-                    setCorrectAnswer(generatedMusicObject.results[0].correct_answer);
-                    getRandomAnswers(generatedMusicObject.results);
+            localStorage.removeItem("countOfAnsweredQuestion");
 
-                    break;
-            }
-        })();
+            return;
+        } else if(getChoosenCategory === "music") {
+            const generatedMusicObject: any = await musicQuestions(getChoosenDifficulty);
+            
+            setQuestions(generatedMusicObject.results);
+            setIndividualQuestion(generatedMusicObject.results[numberOfQuestion].question);
+            setCorrectAnswer(generatedMusicObject.results[numberOfQuestion].correct_answer);
+            getRandomAnswers(generatedMusicObject.results);
+
+            setNumberOfQuestion(oldState => oldState + 1);
+
+            localStorage.removeItem("countOfAnsweredQuestion");
+            return;
+
+        }
+
+    }
+
+    useEffect(() => {   
+        getFirstQuestion();
+
     }, []);
 
     return (
@@ -91,8 +109,8 @@ const QuestionScreen = () => {
                     </div>
 
                     <div className={width > 900 ? 'jokers-class' : 'jokers-class-mobile'}>
-                        <CallAFriend correctAnswer={questions[numberOfQuestion].correct_answer} />
-                        <AudienceHelp correctAnswer={questions[numberOfQuestion].correct_answer} />
+                        <CallAFriend correctAnswer={correctAnswer} />
+                        <AudienceHelp correctAnswer={correctAnswer} />
                         <FiftyFifty />
                         
                     </div>
@@ -102,6 +120,8 @@ const QuestionScreen = () => {
                     <div className='question-class'>
                         <h3>{numberOfQuestion}. {getIndividualQuestion}</h3>
                     </div>
+
+                    {correctAnswer}
                     <div className='answers-class' >
                         {
                             answers.map((item: any, index: number) => {

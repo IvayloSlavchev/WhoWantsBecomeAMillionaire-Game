@@ -4,7 +4,7 @@ import useWindowScreenSize from '../../useWindowScreenSize';
 import { Link } from 'react-router-dom';
 
 const EndScreen = () => {
-    const [width, height] = useWindowScreenSize();
+    const [width] = useWindowScreenSize();
 
     const [message, setMessage] = useState<string>("");
     const [countOfAnsweredQuestions, setCountOfAnsweredQuestions] = useState<number>(0);
@@ -58,7 +58,11 @@ const EndScreen = () => {
 
             <div className='play-again-button-class'>
                 <Link to='/'>
-                    <button className='play-again-button'>Play Again</button>
+                    <button className='play-again-button' onClick={() => {
+                        localStorage.removeItem("difficulty");
+                        localStorage.removeItem("category");
+                        localStorage.removeItem("countOfAnsweredQuestion");
+                    }}>Play Again</button>
                 </Link>
             </div>
         </div>
