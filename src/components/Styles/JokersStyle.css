@@ -1,30 +1,38 @@
-.audience-root-element,
-.audience-answer-class {
-    width: 100%;
+.call-friend-joker-root-element,
+.audience-joker-root-element {
+    width: 100%;   
+    text-align: center; 
 }
 
-.timer-root-element {
-    border: 1px solid white;
+.call-friend-button, 
+.audience-button-help,
+.fifty-fifty-button-joker {
+    background: black;
     color: white;
+    border: 3px solid blue;
     border-radius: 50%;
-    width: 50%;
-    padding: .3rem;
-    text-align: center;
-}
-
-.audience-button, .call-friend-button, .fifty-fifty-joker-button {
-    background: none;
-    color: white;
-    width: 100%;
-    border-radius: 50%;
-    border: 1px solid black;
+    width: 90%;
+    padding: .5rem;
     cursor: pointer;
 }
-
-.friend-answer, .audience-answer {
-    color: white;
+.audience-button-help {
+    margin-left: -1rem;
 }
 
-.fifty-fifty-joker-button {
-    padding: .4rem;
+.fifty-fifty-button-joker {
+    padding: 1rem;
+}
+
+.call-friend-button {
+    margin-left: -2rem;
+}
+
+.answer-paragraph {
+    width: 100%;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 22px;
 }

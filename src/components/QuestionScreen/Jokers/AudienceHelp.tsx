@@ -1,35 +1,33 @@
-import { useState } from  'react';
+import { useState } from 'react';
+import useWindowScreenSize from '../../../useWindowScreenSize';
 import "../../Styles/JokersStyle.css";
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 
-const AudienceHelp = ({ correctAnswer } : { correctAnswer: string }) => {
+const AudienceHelp = ({ correctAnswer }: { correctAnswer: string }) => {
     const [hasJokerBeenUsed, setHasJokerBeenUsed] = useState<boolean>(false);
-    const [audienceAnswerHook, setAudienceAnswer] = useState<string>("");
-    const [hasUserChooseTheJoker, setHasUserChooseTheJoker] = useState<boolean>(false);
+    const [friendAnswer, setFriendAnswer] = useState<string>("");    
+    const [hasUserClickedTheJoker, setHasUserClickedTheJoker] = useState<boolean>(false);
 
-    function askAudienceForHelp() {
-        if(hasJokerBeenUsed) return;
+    function callAFriendFunction() {
+        if(hasJokerBeenUsed === true) return;
 
-        setAudienceAnswer(correctAnswer);
-        setHasUserChooseTheJoker(true);
+        setHasUserClickedTheJoker(true);
+        setFriendAnswer("We think the right answer is - " + correctAnswer)
         setTimeout(() => {
             setHasJokerBeenUsed(true);
+            
+            setFriendAnswer("");
         }, 5000);
     }
 
     return (
-       <div className='audience-root-element'>
+        <div className='audience-joker-root-element'>
             {
-                !hasJokerBeenUsed ? <div className='audience-answer-class'>
-                    <button className='audience-button' onClick={() => askAudienceForHelp()}>
-                        <Diversity3Icon />
-                    </button>
-                    <p className='audience-answer'>{hasUserChooseTheJoker ? audienceAnswerHook : null}</p>
-                </div> : <button className='audience-button' disabled={true}>
-                    <Diversity3Icon />
-                </button>
+                hasJokerBeenUsed ? <button className='audience-button-help' disabled={true}><Diversity3Icon /></button> :
+                <button className='audience-button-help' onClick={() => callAFriendFunction()}><Diversity3Icon /></button>
             }
-       </div>
+            { hasUserClickedTheJoker ? <p className='answer-paragraph'>{friendAnswer}</p> : null }
+        </div>
     )
 }
 

@@ -21,8 +21,10 @@ const QuestionScreen = () => {
     const [correctAnswer, setCorrectAnswer] = useState<string>("");
 
     const [numberOfAnsweredQuestions, setNumberOfAnsweredQuestions] = useState<number>(1);
- 
     const [hasAnswerBeenChoosed, setHasAnswerBeenChoosed] = useState<boolean>(true);
+
+    const [rightOrWrongAnswer, setRightOrWrongAnswer] = useState<string>("");
+    const [isNextQuestionButtonClicked, setIsNextQuestionButtonClicked] = useState<boolean>(false);
 
     function getQuestion() {
         if (numberOfQuestion === 15) {
@@ -32,18 +34,21 @@ const QuestionScreen = () => {
         }
 
         if (providedAnswer !== correctAnswer) {
+            setRightOrWrongAnswer('red');
             return window.location.href = '/finish';
-        }
+        } 
 
-        setIndividualQuestion(questions[numberOfQuestion].question);
-        setCorrectAnswer(questions[numberOfQuestion].correct_answer);
-        getRandomAnswers(questions);
+        setTimeout(() => {
+            setIndividualQuestion(questions[numberOfQuestion].question);
+            setCorrectAnswer(questions[numberOfQuestion].correct_answer);
+            getRandomAnswers(questions);
+        }, 10);
 
         localStorage.setItem("countOfAnsweredQuestion", numberOfAnsweredQuestions.toString());
 
         setNumberOfQuestion(oldIndex => oldIndex + 1);
         setNumberOfAnsweredQuestions(oldCount => oldCount + 1);
-
+        
     }
 
     function getRandomAnswers(providedArray: any) {
@@ -75,6 +80,7 @@ const QuestionScreen = () => {
                 setCorrectAnswer(generatedFilmsQbject.results[numberOfQuestion].correct_answer);
                 getRandomAnswers(generatedFilmsQbject.results);
                 setNumberOfQuestion(oldState => oldState + 1);
+
                 localStorage.removeItem("countOfAnsweredQuestion");
                 break;
 
@@ -87,6 +93,7 @@ const QuestionScreen = () => {
                 getRandomAnswers(generatedMusicObject.results);
 
                 setNumberOfQuestion(oldState => oldState + 1);
+
                 localStorage.removeItem("countOfAnsweredQuestion");
                 break;
         }
@@ -100,24 +107,22 @@ const QuestionScreen = () => {
     return (
         <div className='questions-root-element'>
             {questions.length == 0 ? <h1 className='loading-message'>Loading...</h1> : <div>
-                <div className='jokers-timer-and-next-question-button'>
-                    <div className='timer-and-next-question-buttton'>
-                        <Timer hasAnswerBeenChoosed={hasAnswerBeenChoosed} />
-                        <button className='next-question-button' onClick={() => {
-                            setHasAnswerBeenChoosed(false);
-
-                            setTimeout(() => {
-                                setHasAnswerBeenChoosed(true)
-                            }, 1000);
-                            getQuestion();
-                        }}>Next</button>
-                    </div>
-
-                    <div className={width > 900 ? 'jokers-class' : 'jokers-class-mobile'}>
-                        <CallAFriend correctAnswer={correctAnswer} />
-                        <AudienceHelp correctAnswer={correctAnswer} />
-                        <FiftyFifty />
-                    </div>
+                <div className={width > 1100 ? 'jokers-class' : 'jokers-class-mobile'}>
+                    <CallAFriend correctAnswer={correctAnswer} />
+                    <AudienceHelp correctAnswer={correctAnswer} />
+                    <FiftyFifty />
+                    <button className='next-question-button' onClick={() => {
+                        setHasAnswerBeenChoosed(false);
+                        setIsNextQuestionButtonClicked(true);
+                        setTimeout(() => {
+                            setHasAnswerBeenChoosed(true);
+                        }, 1000);
+                        setTimeout(() => {
+                            setIsNextQuestionButtonClicked(false);
+                        }, 5);
+                        getQuestion();
+                    }}>Next</button>
+                    <Timer hasAnswerBeenChoosed={hasAnswerBeenChoosed} />
                 </div>
 
                 <div className='question-and-answers-classes'>
@@ -125,14 +130,21 @@ const QuestionScreen = () => {
                         <h3>{numberOfQuestion}. {getIndividualQuestion}</h3>
                     </div>
 
-                    {correctAnswer}
                     <div className='answers-class' >
                         {
                             answers.map((item: any, index: number) => {
-                                return <button
+                                return <div style={{ background: correctAnswer == item && isNextQuestionButtonClicked ? 'lightgreen' : '' }}>
+                                    <button
+                                    onClick={() => { 
+                                        setProvidedAnswer(item);
+                                        setRightOrWrongAnswer('orange')
+                                    }}
+                                    style={{ background: item == providedAnswer ? rightOrWrongAnswer : ''}}
                                     className='answer-button' key={index}
-                                    onClick={() => {setProvidedAnswer(item)}}>
-                                    {index == 0 ? "A:" : null} {index == 1 ? "B:" : null} {index == 2 ? "C:" : null} {index == 3 ? "D:" : null} {item}</button>
+                                    >
+                                    {index == 0 ? "A:" : null} {index == 1 ? "B:" : null} {index == 2 ? "C:" : null} {index == 3 ? "D:" : null} {item}    
+                                    </button>
+                                </div>
                             })
                         }
                     </div>

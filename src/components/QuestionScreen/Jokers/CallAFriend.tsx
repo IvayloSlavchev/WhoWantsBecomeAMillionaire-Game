@@ -1,39 +1,34 @@
 import { useState } from 'react';
-import "../../Styles/JokersStyle.css";
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import useWindowScreenSize from '../../../useWindowScreenSize';
+import "../../Styles/JokersStyle.css"
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 
 const CallAFriend = ({ correctAnswer }: { correctAnswer: string }) => {
-    const [width] = useWindowScreenSize();
-    const [hasJokenBeenUsed, setHasJokerBeenUsed] = useState<boolean>(false);
-    const [friendAnswer, setFriendAnswer] = useState<string>("");
-    const [hasUserChooseTheJoker, setHasUserChooseTheJoker] = useState<boolean>(false);
+    const [hasJokerBeenUsed, setHasJokerBeenUsed] = useState<boolean>(false);
+    const [friendAnswer, setFriendAnswer] = useState<string>("");    
+    const [hasUserClickedTheJoker, setHasUserClickedTheJoker] = useState<boolean>(false);
 
-    function callFriendFunction() {
-        if(hasJokenBeenUsed) return;
+    function callAFriendFunction() {
+        if(hasJokerBeenUsed === true) return;
 
-        setFriendAnswer(correctAnswer);
-        setHasUserChooseTheJoker(true);
+        setHasUserClickedTheJoker(true);
+        setFriendAnswer("I think the right answer is - " + correctAnswer)
         setTimeout(() => {
             setHasJokerBeenUsed(true);
+            
+            setFriendAnswer("");
         }, 5000);
     }
 
     return (
-        <div className='call-friend-root-element'>
+        <div className='call-friend-joker-root-element'>
             {
-                !hasJokenBeenUsed ? <div className={width > 900 ? 'friends-answer-class' : 'friends-answer-class-mobile'}>
-                    <button className='call-friend-button' onClick={() => callFriendFunction()}>
-                        <LocalPhoneIcon />
-                    </button>
-
-                    <p className='friend-answer'>{hasUserChooseTheJoker ? friendAnswer : null}</p>
-                </div> : <button className='call-friend-button' disabled={true}>
-                    <LocalPhoneIcon />
-                </button>
+                hasJokerBeenUsed ? <button className='call-friend-button' disabled={true}><LocalPhoneIcon /></button> :
+                <button className='call-friend-button' onClick={() => callAFriendFunction()}><LocalPhoneIcon /></button>
             }
+            { hasUserClickedTheJoker ? <p className='answer-paragraph'>{friendAnswer}</p> : null }
         </div>
     )
 }
 
-export default CallAFriend;
+export default CallAFriend

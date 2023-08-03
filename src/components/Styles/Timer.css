@@ -1,8 +1,8 @@
-.timer-root-element {
-    border: 1px solid white;
+.timer-class {
     color: white;
     border-radius: 50%;
-    width: 50%;
-    padding: .3rem;
-    text-align: center;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    font-size: 18px;
 }

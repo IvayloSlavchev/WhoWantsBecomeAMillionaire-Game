@@ -18,13 +18,13 @@ const Timer = ({ hasAnswerBeenChoosed }: { hasAnswerBeenChoosed: boolean }) => {
                 clearInterval(interval)
             }
         } else {
-            window.location.href = '/finish';
+           // window.location.href = '/finish';
         }
     }, [timer])
 
     return (
         <div className='timer-root-element'>
-            {timer}
+            <div className="timer-class">{timer}</div>
         </div>
     )
 }

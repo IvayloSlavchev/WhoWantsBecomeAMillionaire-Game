@@ -1,6 +1,7 @@
 .questions-root-element {
     width: 100%;
     height: 100vh;
+    overflow: hidden;
 }
 
 .question-and-answers-classes {
@@ -28,6 +29,7 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
 }
+
 .answer-button {
     text-align: left;
     padding: 10px;
@@ -45,27 +47,28 @@
     text-align: center;
 }
 
-.jokers-timer-and-next-question-button {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-}
-
 .next-question-button {
     margin-top: .5rem;
+    background: none;
+    border: 1px solid white;
+    color: white;
+    padding: .5rem;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 2rem;
 }
 
-
-.jokers-class {
-    width: 10%;
+.jokers-class, .jokers-class-mobile  {
+    width: 15%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+
+    align-items: center;
     margin-left: auto;
-    margin-right: 2rem;
+    margin-right: 1rem;
 }
 
+
 .jokers-class-mobile {
-    display: flex;
-    margin-right: auto;
+    width: 90%;
 }
