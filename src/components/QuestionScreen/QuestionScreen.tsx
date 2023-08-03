@@ -5,7 +5,6 @@ import useWindowScreenSize from '../../useWindowScreenSize';
 
 import CallAFriend from './Jokers/CallAFriend';
 import AudienceHelp from './Jokers/AudienceHelp';
-import FiftyFifty from './Jokers/FiftyFifty';
 import Timer from './Timer/Timer';
 
 const QuestionScreen = () => {
@@ -26,7 +25,9 @@ const QuestionScreen = () => {
     const [rightOrWrongAnswer, setRightOrWrongAnswer] = useState<string>("");
     const [isNextQuestionButtonClicked, setIsNextQuestionButtonClicked] = useState<boolean>(false);
 
-    function getQuestion() {
+    const [isFiftyFiftyJokerUsed, setIsFiftyFiftyJokerUsed] = useState<boolean>(false);
+
+    function getQuestion() { 
         if (numberOfQuestion === 15) {
             setNumberOfAnsweredQuestions(oldCount => oldCount + 1);
             localStorage.setItem("countOfAnsweredQuestion", numberOfAnsweredQuestions.toString());
@@ -65,6 +66,20 @@ const QuestionScreen = () => {
         return providedArray;
     }
 
+    function fiftyFiftyJokerFunction() {
+        const randomWrongAnswer: number = Math.floor(Math.random() * 3);
+
+        //The wrong answer should not be the correct one
+        const arrayOfWrongAnswer = answers.filter((answer: string) => {
+            return answer !== correctAnswer;
+        })
+        
+        const slicedArray: string[] = [arrayOfWrongAnswer[randomWrongAnswer], correctAnswer];
+        arrayRotate(slicedArray, randomWrongAnswer);
+        setAnswers(slicedArray);
+        setIsFiftyFiftyJokerUsed(true);
+    }
+
     async function getFirstQuestion() {
         const getChoosenCategory: string | null = localStorage.getItem("category");
         const getChoosenDifficulty: string | null = localStorage.getItem("difficulty");
@@ -83,7 +98,6 @@ const QuestionScreen = () => {
 
                 localStorage.removeItem("countOfAnsweredQuestion");
                 break;
-
             case "music":
                 const generatedMusicObject: any = await musicQuestions(getChoosenDifficulty);
 
@@ -110,7 +124,15 @@ const QuestionScreen = () => {
                 <div className={width > 1100 ? 'jokers-class' : 'jokers-class-mobile'}>
                     <CallAFriend correctAnswer={correctAnswer} />
                     <AudienceHelp correctAnswer={correctAnswer} />
-                    <FiftyFifty />
+
+                    {/*
+                        @dev I didn't make another component for 50:50 joker,
+                        because it will be easier to do the functionality here
+                    */}
+                    <button onClick={() => {
+                        fiftyFiftyJokerFunction();
+                    }} disabled={isFiftyFiftyJokerUsed ? true : false} className='fifty-fifty-button-joker'>50:50</button>
+
                     <button className='next-question-button' onClick={() => {
                         setHasAnswerBeenChoosed(false);
                         setIsNextQuestionButtonClicked(true);
@@ -133,14 +155,14 @@ const QuestionScreen = () => {
                     <div className='answers-class' >
                         {
                             answers.map((item: any, index: number) => {
-                                return <div style={{ background: correctAnswer == item && isNextQuestionButtonClicked ? 'lightgreen' : '' }}>
+                                return <div key={index} style={{ background: correctAnswer == item && isNextQuestionButtonClicked ? 'lightgreen' : '' }}>
                                     <button
                                     onClick={() => { 
                                         setProvidedAnswer(item);
                                         setRightOrWrongAnswer('orange')
                                     }}
                                     style={{ background: item == providedAnswer ? rightOrWrongAnswer : ''}}
-                                    className='answer-button' key={index}
+                                    className='answer-button'
                                     >
                                     {index == 0 ? "A:" : null} {index == 1 ? "B:" : null} {index == 2 ? "C:" : null} {index == 3 ? "D:" : null} {item}    
                                     </button>

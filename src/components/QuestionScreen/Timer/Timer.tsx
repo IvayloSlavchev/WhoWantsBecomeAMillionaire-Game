@@ -18,7 +18,7 @@ const Timer = ({ hasAnswerBeenChoosed }: { hasAnswerBeenChoosed: boolean }) => {
                 clearInterval(interval)
             }
         } else {
-           // window.location.href = '/finish';
+            window.location.href = '/finish';
         }
     }, [timer])
 
