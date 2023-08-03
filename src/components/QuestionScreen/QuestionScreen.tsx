@@ -19,18 +19,19 @@ const QuestionScreen = () => {
     const [numberOfQuestion, setNumberOfQuestion] = useState<number>(0);
     const [providedAnswer, setProvidedAnswer] = useState<string>("");
     const [correctAnswer, setCorrectAnswer] = useState<string>("");
-    const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
 
     const [numberOfAnsweredQuestions, setNumberOfAnsweredQuestions] = useState<number>(1);
+ 
+    const [hasAnswerBeenChoosed, setHasAnswerBeenChoosed] = useState<boolean>(true);
 
     function getQuestion() {
-        if(numberOfQuestion === 15) {
+        if (numberOfQuestion === 15) {
             setNumberOfAnsweredQuestions(oldCount => oldCount + 1);
             localStorage.setItem("countOfAnsweredQuestion", numberOfAnsweredQuestions.toString());
             return window.location.href = '/finish';
         }
 
-        if(providedAnswer !== correctAnswer) {
+        if (providedAnswer !== correctAnswer) {
             return window.location.href = '/finish';
         }
 
@@ -39,10 +40,10 @@ const QuestionScreen = () => {
         getRandomAnswers(questions);
 
         localStorage.setItem("countOfAnsweredQuestion", numberOfAnsweredQuestions.toString());
-        
+
         setNumberOfQuestion(oldIndex => oldIndex + 1);
         setNumberOfAnsweredQuestions(oldCount => oldCount + 1);
-        
+
     }
 
     function getRandomAnswers(providedArray: any) {
@@ -53,10 +54,10 @@ const QuestionScreen = () => {
         return answerArray;
     }
 
-    function arrayRotate(arr: any, count: number) {
-        const len = arr.length
-        arr.push(...arr.splice(0, (-count % len + len) % len))
-        return arr
+    function arrayRotate(providedArray: any, numberOfRotations: number) {
+        const arrayLength: number = providedArray.length;
+        providedArray.push(...providedArray.splice(0, (-numberOfRotations % arrayLength + arrayLength) % arrayLength));
+        return providedArray;
     }
 
     async function getFirstQuestion() {
@@ -65,56 +66,59 @@ const QuestionScreen = () => {
 
         if (getChoosenCategory === null || getChoosenCategory === null) return;
 
-        if(getChoosenCategory == "films") {
-            const generatedFilmsQbject: any = await filmsQuestions(getChoosenDifficulty);
+        switch (getChoosenCategory) {
+            case "films":
+                const generatedFilmsQbject: any = await filmsQuestions(getChoosenDifficulty);
 
-            setQuestions(generatedFilmsQbject.results);
-            setIndividualQuestion(generatedFilmsQbject.results[numberOfQuestion].question);
-            setCorrectAnswer(generatedFilmsQbject.results[numberOfQuestion].correct_answer);
-            getRandomAnswers(generatedFilmsQbject.results);
-            setNumberOfQuestion(oldState => oldState + 1);
+                setQuestions(generatedFilmsQbject.results);
+                setIndividualQuestion(generatedFilmsQbject.results[numberOfQuestion].question);
+                setCorrectAnswer(generatedFilmsQbject.results[numberOfQuestion].correct_answer);
+                getRandomAnswers(generatedFilmsQbject.results);
+                setNumberOfQuestion(oldState => oldState + 1);
+                localStorage.removeItem("countOfAnsweredQuestion");
+                break;
 
-            localStorage.removeItem("countOfAnsweredQuestion");
+            case "music":
+                const generatedMusicObject: any = await musicQuestions(getChoosenDifficulty);
 
-            return;
-        } else if(getChoosenCategory === "music") {
-            const generatedMusicObject: any = await musicQuestions(getChoosenDifficulty);
-            
-            setQuestions(generatedMusicObject.results);
-            setIndividualQuestion(generatedMusicObject.results[numberOfQuestion].question);
-            setCorrectAnswer(generatedMusicObject.results[numberOfQuestion].correct_answer);
-            getRandomAnswers(generatedMusicObject.results);
+                setQuestions(generatedMusicObject.results);
+                setIndividualQuestion(generatedMusicObject.results[numberOfQuestion].question);
+                setCorrectAnswer(generatedMusicObject.results[numberOfQuestion].correct_answer);
+                getRandomAnswers(generatedMusicObject.results);
 
-            setNumberOfQuestion(oldState => oldState + 1);
-
-            localStorage.removeItem("countOfAnsweredQuestion");
-            return;
-
+                setNumberOfQuestion(oldState => oldState + 1);
+                localStorage.removeItem("countOfAnsweredQuestion");
+                break;
         }
 
     }
 
-    useEffect(() => {   
+    useEffect(() => {
         getFirstQuestion();
-
     }, []);
 
     return (
         <div className='questions-root-element'>
             {questions.length == 0 ? <h1 className='loading-message'>Loading...</h1> : <div>
-               <div className='jokers-timer-and-next-question-button'>
+                <div className='jokers-timer-and-next-question-button'>
                     <div className='timer-and-next-question-buttton'>
-                        <Timer />
-                        <button className='next-question-button' onClick={() => getQuestion()}>Next</button>
+                        <Timer hasAnswerBeenChoosed={hasAnswerBeenChoosed} />
+                        <button className='next-question-button' onClick={() => {
+                            setHasAnswerBeenChoosed(false);
+
+                            setTimeout(() => {
+                                setHasAnswerBeenChoosed(true)
+                            }, 1000);
+                            getQuestion();
+                        }}>Next</button>
                     </div>
 
                     <div className={width > 900 ? 'jokers-class' : 'jokers-class-mobile'}>
                         <CallAFriend correctAnswer={correctAnswer} />
                         <AudienceHelp correctAnswer={correctAnswer} />
                         <FiftyFifty />
-                        
                     </div>
-               </div>
+                </div>
 
                 <div className='question-and-answers-classes'>
                     <div className='question-class'>
@@ -127,18 +131,14 @@ const QuestionScreen = () => {
                             answers.map((item: any, index: number) => {
                                 return <button
                                     className='answer-button' key={index}
-                                    onClick={() => setProvidedAnswer(item)}
-                                    style={{ background: isAnswerCorrect ? 'darkgreen' : 'red' }}
-                                >
-                                    {index == 0 ? "A" : null} {index == 1 ? "B" : null} {index == 2 ? "C" : null} {index == 3 ? "D" : null}:
-                                    {item}</button>
+                                    onClick={() => {setProvidedAnswer(item)}}>
+                                    {index == 0 ? "A:" : null} {index == 1 ? "B:" : null} {index == 2 ? "C:" : null} {index == 3 ? "D:" : null} {item}</button>
                             })
                         }
                     </div>
                 </div>
 
             </div>}
-
         </div>
     )
 }

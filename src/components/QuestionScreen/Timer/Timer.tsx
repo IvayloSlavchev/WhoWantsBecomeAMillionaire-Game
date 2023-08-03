@@ -1,29 +1,29 @@
 import { useState, useEffect } from "react";
 import "../../Styles/Timer.css";
 
-const Timer = () => {
+const Timer = ({ hasAnswerBeenChoosed }: { hasAnswerBeenChoosed: boolean }) => {
     const [timer, setTimer] = useState<number>(60);
 
-    function startCountdown() {
-    }
-    
     useEffect(() => {
-    
         let interval: number = 0;
-        
-        if(timer > 0) {
-            // interval = setInterval(() => setTimer(oldState => oldState - 1), 1000);
-            // return () => {
-            //     clearInterval(interval);
-            // }
+
+        if(hasAnswerBeenChoosed === false) setTimer(60);
+
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer(oldCount => oldCount - 1);
+            }, 1000);
+
+            return () => {
+                clearInterval(interval)
+            }
         } else {
             window.location.href = '/finish';
         }
-
     }, [timer])
 
     return (
-        <div className='timer-root-element'> 
+        <div className='timer-root-element'>
             {timer}
         </div>
     )
