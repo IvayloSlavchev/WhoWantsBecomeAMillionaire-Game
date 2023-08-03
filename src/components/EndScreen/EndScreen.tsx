@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import "../Styles/EndScreen.css";
 import useWindowScreenSize from '../../useWindowScreenSize';
+import { Link } from 'react-router-dom';
 
 const EndScreen = () => {
     const [width, height] = useWindowScreenSize();
@@ -44,7 +45,9 @@ const EndScreen = () => {
             
 
             <div className='play-again-button-class'>
-                <button className='play-again-button'>Play Again</button>
+                <Link to='/'>
+                    <button className='play-again-button'>Play Again</button>
+                </Link>
             </div>
         </div>
     )

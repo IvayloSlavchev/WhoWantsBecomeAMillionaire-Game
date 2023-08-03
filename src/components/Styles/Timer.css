@@ -1,0 +1,8 @@
+.timer-root-element {
+    border: 1px solid white;
+    color: white;
+    border-radius: 50%;
+    width: 1%;
+    padding: .3rem;
+    text-align: center;
+}

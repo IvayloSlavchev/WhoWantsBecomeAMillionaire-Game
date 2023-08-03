@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
-import { geographyQuestions, sportsQuestions } from '../FetchRequests/FetchRequests';
+import { musicQuestions, filmsQuestions } from '../FetchRequests/FetchRequests';
 import '../Styles/QuestionScreen.css';
 import useWindowScreenSize from '../../useWindowScreenSize';
-import ErrorPage from '../ErrorPage/ErrorPage';
+
+import CallAFriend from './Jokers/CallAFriend';
+import AudienceHelp from './Jokers/AudienceHelp';
+import FiftyFifty from './Jokers/FiftyFifty';
+import Timer from './Timer/Timer';
 
 const QuestionScreen = () => {
     const [width, height] = useWindowScreenSize();
@@ -18,12 +22,6 @@ const QuestionScreen = () => {
     const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
 
     function getQuestion() {
-        console.log(correctAnswer);
-        console.log(numberOfQuestion);
-        console.log(questions[numberOfQuestion].question);
-
-
-
         if (providedAnswer !== correctAnswer) {
             return setIsAnswerCorrect(false);
         }
@@ -51,6 +49,7 @@ const QuestionScreen = () => {
         return arr
     }
 
+
     useEffect(() => {
 
         (async () => {
@@ -60,18 +59,18 @@ const QuestionScreen = () => {
             if (getChoosenCategory === null || getChoosenCategory === null) return;
 
             switch (getChoosenCategory) {
-                case "sports":
-                    const generatedSportQbject: any = await sportsQuestions(getChoosenDifficulty);
-                    setQuestions(generatedSportQbject.results);
-                    setIndividualQuestion(generatedSportQbject.results[0].question);
-                    getRandomAnswers(generatedSportQbject.results);
+                case "films":
+                    const generatedFilmsQbject: any = await filmsQuestions(getChoosenDifficulty);
+                    setQuestions(generatedFilmsQbject.results);
+                    setIndividualQuestion(generatedFilmsQbject.results[0].question);
+                    getRandomAnswers(generatedFilmsQbject.results);
                     break;
-                case "geography":
-                    const generatedGeographyObject: any = await geographyQuestions(getChoosenDifficulty);
-                    setQuestions(generatedGeographyObject.results);
-                    setIndividualQuestion(generatedGeographyObject.results[0].question);
-                    setCorrectAnswer(generatedGeographyObject.results[0].correct_answer);
-                    getRandomAnswers(generatedGeographyObject.results);
+                case "music":
+                    const generatedMusicObject: any = await musicQuestions(getChoosenDifficulty);
+                    setQuestions(generatedMusicObject.results);
+                    setIndividualQuestion(generatedMusicObject.results[0].question);
+                    setCorrectAnswer(generatedMusicObject.results[0].correct_answer);
+                    getRandomAnswers(generatedMusicObject.results);
 
                     break;
             }
@@ -80,7 +79,19 @@ const QuestionScreen = () => {
 
     return (
         <div className='questions-root-element'>
-            {questions.length == 0 ? <ErrorPage /> : <div>
+            {questions.length == 0 ? <h1 className='loading-message'>Loading...</h1> : <div>
+                <div className={width > 900 ? 'jokers-class' : 'jokers-class-mobile'}>
+                    <CallAFriend correctAnswer={questions[numberOfQuestion].correct_answer} />
+                    <AudienceHelp correctAnswer={questions[numberOfQuestion].correct_answer} />
+                    <FiftyFifty />
+                    <button className='' onClick={() => getQuestion()}>Next</button>
+                </div>
+
+                <div>
+                    <Timer />
+                </div>
+
+
                 <div className='question-and-answers-classes'>
                     <div className='question-class'>
                         <h3>{numberOfQuestion}. {getIndividualQuestion}</h3>
@@ -100,11 +111,6 @@ const QuestionScreen = () => {
                     </div>
                 </div>
 
-                <div className='jokers-class'>
-                    <button className='' onClick={() => getQuestion()}>Next</button>
-                    <button></button>
-                    <button></button>
-                </div>
             </div>}
 
         </div>

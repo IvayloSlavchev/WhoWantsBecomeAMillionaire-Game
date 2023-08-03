@@ -29,8 +29,8 @@ const StartScreen = () => {
 
                         <select className={ width > 900 ? 'category-dropdown-menu' : 'category-dropdown-menu-mobile' } onClick={(event: any) => setChoosenCategory(event.target.value)}>
                             <option className='dropdown-option' selected value="Default value">Choose Here</option>
-                            <option className='dropdown-option' value="Geography">Geography</option>
-                            <option className='dropdown-option' value="Sports">Sports</option>
+                            <option className='dropdown-option' value="Music">Music</option>
+                            <option className='dropdown-option' value="Films">Films</option>
                         </select>
 
                         <h2>Difficulty: </h2>
