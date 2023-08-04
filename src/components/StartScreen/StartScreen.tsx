@@ -5,7 +5,7 @@ import useWindowScreenSize from '../../useWindowScreenSize';
 import { Link } from 'react-router-dom';
 
 const StartScreen = () => {
-    const [width, height] = useWindowScreenSize();
+    const [width] = useWindowScreenSize();
     const [isStartButtonClicked, setIsStartButtonClicked] = useState<boolean>(false);
     const [choosenCategory, setChoosenCategory] = useState<string>("Choose Here");
     const [choosenDifficulty, setChoosenDifficulty] = useState<string>("Choose Here");
@@ -45,7 +45,7 @@ const StartScreen = () => {
                         <br />
 
                        {
-                         choosenCategory != "Choose Here" && choosenDifficulty !== 'Choose Here' 
+                         choosenCategory !== "Choose Here" && choosenDifficulty !== 'Choose Here' 
                          ? <Link to='/questions'>
                                 <button onClick={() => {
                                     localStorage.setItem("category", choosenCategory.toLowerCase());

@@ -29,13 +29,13 @@ const QuestionScreen = () => {
 
     function getQuestion() { 
         if (numberOfQuestion === 15) {
-            setNumberOfAnsweredQuestions(oldCount => oldCount + 1);
-            localStorage.setItem("countOfAnsweredQuestion", numberOfAnsweredQuestions.toString());
+            setNumberOfAnsweredQuestions(oldCountOfAnsweredQuestions => oldCountOfAnsweredQuestions + 1);
+            localStorage.setItem("countOfAnsweredQuestions", numberOfAnsweredQuestions.toString());
             return window.location.href = '/finish';
         }
 
         if (providedAnswer !== correctAnswer) {
-            setRightOrWrongAnswer('red');
+            setRightOrWrongAnswer('red'); // Red means that the answer is wrong
             return window.location.href = '/finish';
         } 
 
@@ -43,12 +43,14 @@ const QuestionScreen = () => {
             setIndividualQuestion(questions[numberOfQuestion].question);
             setCorrectAnswer(questions[numberOfQuestion].correct_answer);
             getRandomAnswers(questions);
-        }, 10);
+        }, 10); // Should pass some time in order to see whether your answer is correct or not
 
-        localStorage.setItem("countOfAnsweredQuestion", numberOfAnsweredQuestions.toString());
+        // I store the number of answered questions in the local storage in order to fetch them in the end screen
+        // I clear them every time user clicks play again button or clicks back button on the browser
+        localStorage.setItem("countOfAnsweredQuestions", numberOfAnsweredQuestions.toString());
 
-        setNumberOfQuestion(oldIndex => oldIndex + 1);
-        setNumberOfAnsweredQuestions(oldCount => oldCount + 1);
+        setNumberOfQuestion(oldQuestionNumber => oldQuestionNumber + 1);
+        setNumberOfAnsweredQuestions(oldCountOfAnsweredQuestions => oldCountOfAnsweredQuestions + 1);
         
     }
 
@@ -74,6 +76,8 @@ const QuestionScreen = () => {
             return answer !== correctAnswer;
         })
         
+        //When user use this joker it should remove two of the incorrect answers and display the correct one
+        //And one of the wrong answers, I am choosing random wrong answer
         const slicedArray: string[] = [arrayOfWrongAnswer[randomWrongAnswer], correctAnswer];
         arrayRotate(slicedArray, randomWrongAnswer);
         setAnswers(slicedArray);
@@ -81,11 +85,16 @@ const QuestionScreen = () => {
     }
 
     async function getFirstQuestion() {
+        //When user chooses category and difficulty, they will be stored in the local storage
+        //In order to make fetch request to the API
+
         const getChoosenCategory: string | null = localStorage.getItem("category");
         const getChoosenDifficulty: string | null = localStorage.getItem("difficulty");
 
-        if (getChoosenCategory === null || getChoosenCategory === null) return;
+        //If user tries to get to the page without choosing category, he/she will be redirected
+        if (getChoosenCategory === null || getChoosenCategory === null) return window.location.href = '/';
 
+        //Making statemnets to see which category user choosed and call that specific function
         switch (getChoosenCategory) {
             case "films":
                 const generatedFilmsQbject: any = await filmsQuestions(getChoosenDifficulty);
@@ -96,7 +105,7 @@ const QuestionScreen = () => {
                 getRandomAnswers(generatedFilmsQbject.results);
                 setNumberOfQuestion(oldState => oldState + 1);
 
-                localStorage.removeItem("countOfAnsweredQuestion");
+                localStorage.removeItem("countOfAnsweredQuestions");
                 break;
             case "music":
                 const generatedMusicObject: any = await musicQuestions(getChoosenDifficulty);
@@ -108,7 +117,7 @@ const QuestionScreen = () => {
 
                 setNumberOfQuestion(oldState => oldState + 1);
 
-                localStorage.removeItem("countOfAnsweredQuestion");
+                localStorage.removeItem("countOfAnsweredQuestions");
                 break;
         }
 
@@ -121,7 +130,7 @@ const QuestionScreen = () => {
     return (
         <div className='questions-root-element'>
             {questions.length == 0 ? <h1 className='loading-message'>Loading...</h1> : <div>
-                <div className={width > 1100 ? 'jokers-class' : 'jokers-class-mobile'}>
+                <div className={width > 1200 ? 'jokers-class' : 'jokers-class-mobile'}>
                     <CallAFriend correctAnswer={correctAnswer} />
                     <AudienceHelp correctAnswer={correctAnswer} />
 
@@ -136,14 +145,21 @@ const QuestionScreen = () => {
                     <button className='next-question-button' onClick={() => {
                         setHasAnswerBeenChoosed(false);
                         setIsNextQuestionButtonClicked(true);
+
                         setTimeout(() => {
                             setHasAnswerBeenChoosed(true);
                         }, 1000);
+
                         setTimeout(() => {
                             setIsNextQuestionButtonClicked(false);
                         }, 5);
                         getQuestion();
                     }}>Next</button>
+
+                    {/* 
+                        If answer is been choosed and user validates his answer it will restart the timer
+                        (only if the answer is correct)
+                    */}
                     <Timer hasAnswerBeenChoosed={hasAnswerBeenChoosed} />
                 </div>
 
@@ -159,7 +175,8 @@ const QuestionScreen = () => {
                                     <button
                                     onClick={() => { 
                                         setProvidedAnswer(item);
-                                        setRightOrWrongAnswer('orange')
+                                        setRightOrWrongAnswer('orange') // When user marks some question it will make the background orange
+                                                                        // While the function validates the answer
                                     }}
                                     style={{ background: item == providedAnswer ? rightOrWrongAnswer : ''}}
                                     className='answer-button'

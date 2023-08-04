@@ -18,6 +18,7 @@ const Timer = ({ hasAnswerBeenChoosed }: { hasAnswerBeenChoosed: boolean }) => {
                 clearInterval(interval)
             }
         } else {
+            //If timer reaches 0 and user did not choosed any answer it will redirect him to the end screen
             window.location.href = '/finish';
         }
     }, [timer])

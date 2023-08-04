@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import useWindowScreenSize from '../../../useWindowScreenSize';
 import "../../Styles/JokersStyle.css";
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 

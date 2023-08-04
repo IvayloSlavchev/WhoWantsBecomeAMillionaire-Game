@@ -22,7 +22,7 @@ const EndScreen = () => {
     }
 
     function hasUserAnsweredAllTheQuestionsFunction() {
-        const numberOfAnsweredQuestions: any = localStorage.getItem('countOfAnsweredQuestion');
+        const numberOfAnsweredQuestions: any = localStorage.getItem('countOfAnsweredQuestions');
 
         setCountOfAnsweredQuestions(Number(numberOfAnsweredQuestions));
         if (numberOfAnsweredQuestions !== '15') {

@@ -13,8 +13,6 @@ async function filmsQuestions(difficulty: string | null) {
     const filmsQuestionsRequest = await fetch(`https://opentdb.com/api.php?amount=16&category=11&difficulty=${difficulty}&type=multiple`);
     const serverQuestionResponses =  await filmsQuestionsRequest.json();
     
-    console.log(serverQuestionResponses);
-    
     return serverQuestionResponses;
 }
 
